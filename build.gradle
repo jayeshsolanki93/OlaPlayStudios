@@ -40,6 +40,7 @@ ext {
     glideVersion = '4.0.0-RC0'
 
     exoPlayerVersion = '2.6.0'
+    circularImageViewVersion = '2.2.0'
 
     junitVersion = '4.12'
 
