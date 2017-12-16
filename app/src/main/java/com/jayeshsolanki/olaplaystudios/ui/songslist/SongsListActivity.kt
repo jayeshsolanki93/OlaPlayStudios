@@ -18,7 +18,6 @@ class SongsListActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_songs_list)
 
-        Log.i("CLASS", "JAYESH KAJOL")
         val songsListFragment = SongsListFragment.newInstance()
         supportFragmentManager.insideTransaction { add(R.id.container, songsListFragment) }
         DaggerSongsListComponent.builder()

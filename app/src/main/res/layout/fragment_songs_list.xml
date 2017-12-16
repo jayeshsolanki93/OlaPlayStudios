@@ -19,4 +19,8 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
+    <!--<com.google.android.exoplayer2.ui.SimpleExoPlayerView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
 </FrameLayout>

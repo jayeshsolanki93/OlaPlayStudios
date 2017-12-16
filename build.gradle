@@ -39,6 +39,8 @@ ext {
     daggerVersion  = '2.11'
     glideVersion = '4.0.0-RC0'
 
+    exoPlayerVersion = '2.6.0'
+
     junitVersion = '4.12'
 
     runnerVersion = '1.0.1'

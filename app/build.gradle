@@ -56,6 +56,10 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     implementation "com.github.bumptech.glide:okhttp3-integration:$glideVersion"
 
+    // ExoPlayer
+    compile "com.google.android.exoplayer:exoplayer-core:$exoPlayerVersion"
+    compile "com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion"
+
     // Unit Testing
     testImplementation "junit:junit:$junitVersion"
 
