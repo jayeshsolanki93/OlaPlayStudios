@@ -135,6 +135,10 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
 
     }
 
+    override fun downloadClick() {
+        Toast.makeText(this.context, "Sorry! This does not work.", Toast.LENGTH_SHORT).show()
+    }
+
     override fun loadFavoriteSongs() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this.view?.context)
         val savedSongs = prefs.getString("SAVED", Gson().toJson(ArrayList<Song>()))

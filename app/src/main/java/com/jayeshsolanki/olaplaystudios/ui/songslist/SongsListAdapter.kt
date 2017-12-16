@@ -44,6 +44,8 @@ class SongsListAdapter : RecyclerView.Adapter<SongsListAdapter.SongViewHolder>()
         fun playButtonClick(songUrl: String, songName: String)
 
         fun favButtonClick(song: Song)
+
+        fun downloadClick()
     }
 
     class SongViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
@@ -81,6 +83,8 @@ class SongsListAdapter : RecyclerView.Adapter<SongsListAdapter.SongViewHolder>()
             }
 
             itemView.btn_play.setOnClickListener{ listener?.playButtonClick(song.url, song.name) }
+
+            itemView.btn_download.setOnClickListener{ listener?.downloadClick() }
         }
 
     }
