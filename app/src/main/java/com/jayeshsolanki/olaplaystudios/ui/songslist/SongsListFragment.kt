@@ -3,7 +3,6 @@ package com.jayeshsolanki.olaplaystudios.ui.songslist
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,10 +36,19 @@ class SongsListFragment : Fragment(), SongsListContract.View {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+        setupSwipeRefreshListener()
+    }
+
+    private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         list_songs.layoutManager = layoutManager
         list_songs.adapter = adapter
+    }
+
+    private fun setupSwipeRefreshListener() {
+        swiperefresh.setOnRefreshListener { presenter.loadSongsList() }
     }
 
     override fun onStart() {
@@ -49,6 +57,7 @@ class SongsListFragment : Fragment(), SongsListContract.View {
     }
 
     override fun showSongsList(songs: List<Song>) {
+        if (swiperefresh.isRefreshing) swiperefresh.isRefreshing = false
         list_songs.post {
             if (adapter.itemCount <= 0) {
                 adapter.setAdapterData(songs.toMutableList())
@@ -59,4 +68,5 @@ class SongsListFragment : Fragment(), SongsListContract.View {
     override fun showError(message: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
 }

@@ -13,7 +13,9 @@
         android:theme="@style/AppTheme"
         android:name=".OlaPlayStudios">
 
-        <activity android:name=".ui.songslist.SongsListActivity">
+        <activity
+            android:name=".ui.songslist.SongsListActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

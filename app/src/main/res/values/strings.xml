@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Ola Play Studios</string>
+    <string name="btn_play_desc">Play the song</string>
+    <string name="btn_download_desc">Download the song</string>
+    <string name="btn_favorite_desc">Add to playlist</string>
+    <string name="cover_image_desc">This is a cover image of a song</string>
 </resources>
