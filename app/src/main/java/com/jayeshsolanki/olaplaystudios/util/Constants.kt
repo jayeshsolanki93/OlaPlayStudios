@@ -21,4 +21,9 @@ object Constants {
         Book your tickets to Bangalore. Ola wants you! ヽ(ヅ)ノ
         """
 
+    enum class ViewType(val value: String) {
+        ALL("ALL"),
+        FAVORITE("FAVORITE")
+    }
+
 }

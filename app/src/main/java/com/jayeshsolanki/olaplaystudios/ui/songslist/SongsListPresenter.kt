@@ -1,7 +1,9 @@
 package com.jayeshsolanki.olaplaystudios.ui.songslist
 
+import android.util.Log
 import com.jayeshsolanki.olaplaystudios.data.model.Song
 import com.jayeshsolanki.olaplaystudios.data.source.songs.SongsRepository
+import com.jayeshsolanki.olaplaystudios.util.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -10,6 +12,8 @@ import javax.inject.Inject
 class SongsListPresenter @Inject
 constructor(private val songsRepository: SongsRepository,
             private val songsListView: SongsListContract.View) : SongsListContract.Presenter {
+
+    var TAG = this.javaClass.simpleName
 
     private val disposable: CompositeDisposable = CompositeDisposable()
 
@@ -30,28 +34,38 @@ constructor(private val songsRepository: SongsRepository,
     }
 
     override fun loadSongsList() {
-        songsRepository.getSongs()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { songs -> processSongs(songs) }, // onNext
-                        { t -> handleError(t) } // onError
-                )
+
+        if (songsListView.viewType.equals(Constants.ViewType.ALL.value)) {
+            songsRepository.getSongs()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            { songs -> processSongs(songs) }, // onNext
+                            { t -> handleError(t) } // onError
+                    )
+        } else {
+            songsListView.loadFavoriteSongs()
+        }
     }
 
     private fun processSongs(songs: List<Song>) {
         if (!songs.isEmpty()) {
             songsListView.showSongsList(songs)
         } else {
-            processEmptySongs()
+            if (songsListView.viewType.equals(Constants.ViewType.FAVORITE.value)) {
+
+            } else {
+                processEmptySongs()
+            }
         }
     }
 
     private fun processEmptySongs() {
-        TODO("Show empty response with a toast on view.")
+        songsListView.showError("There are not songs to load")
     }
     private fun handleError(t: Throwable) {
-        TODO("Log and show some error on view")
+        Log.e(TAG, t.message)
+        songsListView.showError("Something went wrong with the network")
     }
 
 }

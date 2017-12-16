@@ -1,34 +1,36 @@
 package com.jayeshsolanki.olaplaystudios.ui.songslist
 
-import android.content.pm.ApplicationInfo
-import android.media.AudioTrack
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
+import com.google.android.exoplayer2.util.Util
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.jayeshsolanki.olaplaystudios.R
 import com.jayeshsolanki.olaplaystudios.data.model.Song
 import kotlinx.android.synthetic.main.fragment_songs_list.*
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.extractor.ExtractorsFactory
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.DefaultLoadControl
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.LoadControl
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelector
-import com.google.android.exoplayer2.upstream.*
-import com.google.android.exoplayer2.util.Util
-
+import javax.inject.Inject
 
 class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.ButtonClickListener {
+
+    override lateinit var viewType: String
 
     private lateinit var presenter: SongsListContract.Presenter
 
@@ -38,9 +40,13 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
 
     companion object {
 
-        @JvmStatic fun newInstance(): SongsListFragment {
+        private val ARG_FRAGMENT_NAME = "fragmentName"
+
+        @JvmStatic fun newInstance(fragmentName: String): SongsListFragment {
             val fragment = SongsListFragment()
-            // Can pass some args.
+            val args = Bundle()
+            args.putString(ARG_FRAGMENT_NAME, fragmentName)
+            fragment.arguments = args
             return fragment
         }
     }
@@ -49,10 +55,14 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
         this.presenter = presenter
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.getString(ARG_FRAGMENT_NAME)?.let { viewType = it }
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_songs_list, container, false)
-        return view
+        return inflater?.inflate(R.layout.fragment_songs_list, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -89,13 +99,53 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
     }
 
     override fun showError(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this.context, message,
+                Toast.LENGTH_SHORT).show()
     }
 
     override fun playButtonClick(songUrl: String, songName: String) {
         Toast.makeText(this.context, "Playing $songName", Toast.LENGTH_LONG).show()
         exoplayer.prepare(prepareAudioSource(songUrl))
         exoplayer.playWhenReady = true
+    }
+
+    override fun favButtonClick(song: Song) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this.view?.context)
+        val savedSongs = prefs.getString("SAVED", Gson().toJson(ArrayList<Song>()))
+
+        val savedSongsList =
+                Gson().fromJson<List<Song>>(savedSongs, object: TypeToken<List<Song>>() {}.type).toMutableList()
+
+        if (savedSongsList.isEmpty()) {
+            savedSongsList.add(song)
+        } else {
+            var flag = true
+            for (savedSong in savedSongsList) {
+                if (savedSong.name.equals(song.name)) {
+                    savedSongsList.remove(savedSong)
+                    flag = false
+                    break
+                }
+            }
+            if (flag) {
+                savedSongsList.add(song)
+            }
+        }
+        prefs.edit().putString("SAVED", Gson().toJson(savedSongsList)).apply()
+
+    }
+
+    override fun loadFavoriteSongs() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this.view?.context)
+        val savedSongs = prefs.getString("SAVED", Gson().toJson(ArrayList<Song>()))
+
+        val savedSongsList =
+                Gson().fromJson<List<Song>>(savedSongs, object: TypeToken<List<Song>>() {}.type).toMutableList()
+        list_songs.post {
+            if (adapter.itemCount <= 0) {
+                adapter.setAdapterData(savedSongsList)
+            }
+        }
     }
 
     private fun prepareAudioSource(songUrl: String): MediaSource {
@@ -116,4 +166,5 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
         exoplayer.release()
         presenter.unSubscribe()
     }
+
 }

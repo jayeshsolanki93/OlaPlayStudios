@@ -11,7 +11,12 @@ interface SongsListContract {
     }
 
     interface View : BaseView<Presenter> {
+
+        var viewType: String
+
         fun showSongsList(songs: List<Song>)
+
+        fun loadFavoriteSongs()
 
         fun showError(message: String)
     }

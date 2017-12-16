@@ -1,12 +1,14 @@
 package com.jayeshsolanki.olaplaystudios.ui.songslist
 
-import android.net.Uri
+import android.preference.PreferenceManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.jayeshsolanki.olaplaystudios.R
 import com.jayeshsolanki.olaplaystudios.data.model.Song
 import com.jayeshsolanki.olaplaystudios.tool.glide.GlideApp
@@ -38,8 +40,10 @@ class SongsListAdapter : RecyclerView.Adapter<SongsListAdapter.SongViewHolder>()
         this.listener = listener
     }
 
-    public interface ButtonClickListener {
-        public fun playButtonClick(songUrl: String, songName: String)
+    interface ButtonClickListener {
+        fun playButtonClick(songUrl: String, songName: String)
+
+        fun favButtonClick(song: Song)
     }
 
     class SongViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
@@ -54,8 +58,26 @@ class SongsListAdapter : RecyclerView.Adapter<SongsListAdapter.SongViewHolder>()
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                     .into(itemView.cover_image)
 
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this.view.context)
+            val savedSongs = prefs.getString("SAVED", Gson().toJson(ArrayList<Song>()))
+
+            val savedSongsList =
+                    Gson().fromJson<List<Song>>(savedSongs, object: TypeToken<List<Song>>() {}.type).toMutableList()
+
+            var flag = false
+            if (savedSongsList.isNotEmpty()) {
+                for (savedSong in savedSongsList) {
+                    if (savedSong.name.equals(song.name)) {
+                        flag = true
+                        break
+                    }
+                }
+            }
+            itemView.btn_favorite.isChecked = flag
+
             itemView.btn_favorite.setOnCheckedChangeListener { _, isChecked ->
                 Log.i("is fav button checked", isChecked.toString())
+                listener?.favButtonClick(song)
             }
 
             itemView.btn_play.setOnClickListener{ listener?.playButtonClick(song.url, song.name) }
