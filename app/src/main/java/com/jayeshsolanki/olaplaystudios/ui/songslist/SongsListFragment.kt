@@ -145,6 +145,7 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
     }
 
     override fun loadFavoriteSongs() {
+        if (swiperefresh.isRefreshing) swiperefresh.isRefreshing = false
         val prefs = PreferenceManager.getDefaultSharedPreferences(this.view?.context)
         val savedSongs = prefs.getString(Constants.PREFS_KEY_SAVED_PLAYLIST,
                 Gson().toJson(ArrayList<Song>()))
