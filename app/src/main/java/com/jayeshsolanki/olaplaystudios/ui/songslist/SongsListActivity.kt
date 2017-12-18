@@ -1,11 +1,15 @@
 package com.jayeshsolanki.olaplaystudios.ui.songslist
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.jayeshsolanki.olaplaystudios.OlaPlayStudios
 import com.jayeshsolanki.olaplaystudios.R
@@ -13,6 +17,7 @@ import com.jayeshsolanki.olaplaystudios.ui.portfolio.PortfolioActivity
 import com.jayeshsolanki.olaplaystudios.util.Constants
 import com.jayeshsolanki.olaplaystudios.util.insideTransaction
 import kotlinx.android.synthetic.main.activity_songs_list.*
+import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 class SongsListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -27,7 +32,14 @@ class SongsListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_songs_list)
 
+        toolbar.title = getString(R.string.app_name)
+        setSupportActionBar(toolbar)
+        toolbar.setNavigationIcon(R.drawable.ic_menu)
+        drawer.addDrawerListener(ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.drawer_open,R.string.drawer_close))
+
         nav_view.setNavigationItemSelectedListener(this)
+
         addSongsListFragment()
     }
 

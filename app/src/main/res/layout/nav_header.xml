@@ -11,8 +11,8 @@
         android:id="@+id/img_header_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/ola_play"
         android:scaleType="fitCenter"
-        android:src="@drawable/header_logo"
-        android:contentDescription="@string/ola_play" />
+        android:src="@drawable/header_logo" />
 
 </RelativeLayout>

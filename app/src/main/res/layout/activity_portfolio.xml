@@ -1,127 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
+    <include layout="@layout/toolbar" />
+
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/about"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#DE000000"
-        app:layout_constraintBottom_toTopOf="@+id/profile_holder"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/profile_holder"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/inner_constraintLayout"
-            android:layout_width="match_parent"
+        <android.support.v7.widget.CardView
+            android:id="@+id/profile_holder"
+            android:layout_width="368dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp">
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
-                android:layout_width="87dp"
-                android:layout_height="81dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="60dp"
-                android:src="@drawable/me"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/inner_constraintLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="60dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/jayesh"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="#DE000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_margin="8dp">
 
-            <LinearLayout
-                android:layout_width="344dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_image">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="87dp"
+                    android:layout_height="81dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="60dp"
+                    android:src="@drawable/me"
+                    app:civ_border_color="#FF000000"
+                    app:civ_border_width="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
-                    android:id="@+id/email"
+                <TextView
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/email_desc"
-                    app:srcCompat="@drawable/ic_mail" />
+                    android:layout_marginEnd="60dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/jayesh"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textColor="#DE000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/profile_image"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
-                    android:id="@+id/linkedin"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="344dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/linkedin"
-                    app:srcCompat="@drawable/ic_linkedin_logo" />
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="25dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_image">
 
-                <ImageButton
-                    android:id="@+id/twitter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/twitter"
-                    app:srcCompat="@drawable/ic_twitter" />
+                    <ImageButton
+                        android:id="@+id/email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/email_desc"
+                        app:srcCompat="@drawable/ic_mail" />
 
-                <ImageButton
-                    android:id="@+id/stackoverflow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/stackoverflow"
-                    app:srcCompat="@drawable/ic_stackoverflow" />
+                    <ImageButton
+                        android:id="@+id/linkedin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/linkedin"
+                        app:srcCompat="@drawable/ic_linkedin_logo" />
 
-                <ImageButton
-                    android:id="@+id/github"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/github"
-                    app:srcCompat="@drawable/ic_github" />
+                    <ImageButton
+                        android:id="@+id/twitter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/twitter"
+                        app:srcCompat="@drawable/ic_twitter" />
 
-            </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/stackoverflow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/stackoverflow"
+                        app:srcCompat="@drawable/ic_stackoverflow" />
 
-        </android.support.constraint.ConstraintLayout>
+                    <ImageButton
+                        android:id="@+id/github"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/github"
+                        app:srcCompat="@drawable/ic_github" />
 
-    </android.support.v7.widget.CardView>
+                </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

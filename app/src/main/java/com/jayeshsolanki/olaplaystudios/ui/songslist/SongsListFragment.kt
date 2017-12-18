@@ -19,6 +19,7 @@ import com.jayeshsolanki.olaplaystudios.data.model.Song
 import com.jayeshsolanki.olaplaystudios.util.AudioPlayerHelper
 import com.jayeshsolanki.olaplaystudios.util.Constants
 import kotlinx.android.synthetic.main.fragment_songs_list.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.ButtonClickListener {
 
@@ -54,6 +55,9 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.getString(ARG_FRAGMENT_NAME)?.let { viewType = it }
+
+        activity.toolbar.title = if (viewType == Constants.ViewType.FAVORITE.value)
+            getString(R.string.nav_playlist) else getString(R.string.app_name)
 
         setHasOptionsMenu(true)
     }
