@@ -15,10 +15,13 @@ import com.jayeshsolanki.olaplaystudios.util.insideTransaction
 import kotlinx.android.synthetic.main.activity_songs_list.*
 import javax.inject.Inject
 
-class SongsListActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class SongsListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+        SongsListFragment.BackHandlerInterface {
 
     @Inject
     lateinit var songsListPresenter: SongsListPresenter
+
+    private var selectedFragment: SongsListFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,29 @@ class SongsListActivity: AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         nav_view.setNavigationItemSelectedListener(this)
         addSongsListFragment()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_home -> {
+                Toast.makeText(this, getString(R.string.nav_home), Toast.LENGTH_SHORT).show()
+                if (supportFragmentManager.findFragmentByTag(Constants.ViewType.ALL.value) == null) {
+                    addSongsListFragment()
+                }
+            }
+            R.id.nav_playlist -> {
+                Toast.makeText(this, getString(R.string.nav_playlist), Toast.LENGTH_SHORT).show()
+                if (supportFragmentManager.findFragmentByTag(Constants.ViewType.FAVORITE.value) == null) {
+                    addFavoriteFragment()
+                }
+            }
+            R.id.nav_portfolio -> {
+                val i = Intent(this, PortfolioActivity::class.java)
+                startActivity(i)
+            }
+        }
+        drawer.closeDrawer(GravityCompat.START)
+        return true
     }
 
     private fun addSongsListFragment() {
@@ -52,27 +78,16 @@ class SongsListActivity: AppCompatActivity(), NavigationView.OnNavigationItemSel
                 .inject(this)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.nav_home -> {
-                Toast.makeText(this, getString(R.string.nav_home), Toast.LENGTH_SHORT).show()
-                if (supportFragmentManager.findFragmentByTag(Constants.ViewType.ALL.value) == null) {
-                    addSongsListFragment()
-                }
-            }
-            R.id.nav_playlist -> {
-                Toast.makeText(this, getString(R.string.nav_playlist), Toast.LENGTH_SHORT).show()
-                if (supportFragmentManager.findFragmentByTag(Constants.ViewType.FAVORITE.value) == null) {
-                    addFavoriteFragment()
-                }
-            }
-            R.id.nav_portfolio -> {
-                val i = Intent(this, PortfolioActivity::class.java)
-                startActivity(i)
+    override fun onBackPressed() {
+        selectedFragment?.let {
+            if (it.onBackPressed()) {
+                super.onBackPressed()
             }
         }
-        drawer.closeDrawer(GravityCompat.START)
-        return true
+    }
+
+    override fun setSelectedFragment(fragment: SongsListFragment) {
+        this.selectedFragment = fragment
     }
 
 }

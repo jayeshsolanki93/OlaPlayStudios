@@ -4,13 +4,16 @@
     <string name="btn_play_stop_desc">Play/Stop the song</string>
     <string name="btn_download_desc">Download the song</string>
     <string name="btn_favorite_desc">Add to playlist</string>
-
     <string name="cover_image_desc">This is a cover image of a song</string>
 
     <string name="nav_home">Home</string>
     <string name="nav_playlist">Playlist</string>
     <string name="nav_history">History</string>
     <string name="nav_portfolio">Portfolio</string>
+
+    <string name="action_search">Search</string>
+    <string name="search_hint">Search (by name)</string>
+
     <string name="about">About</string>
 
     <string name="jayesh" translatable="false">Jayesh Solanki</string>
@@ -20,6 +23,7 @@
     <string name="twitter">Connect with Jayesh on twitter</string>
     <string name="stackoverflow">Helps others when his android build is still running.</string>
     <string name="github">Connect on Github</string>
+
     <string name="ola_play" translatable="false">Ola Play</string>
 
     <string name="error_no_songs">There are no songs to load</string>

@@ -1,12 +1,13 @@
 package com.jayeshsolanki.olaplaystudios.ui.songslist
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.SearchView
+import android.view.*
 import android.widget.Toast
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
@@ -25,9 +26,13 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
 
     private lateinit var presenter: SongsListContract.Presenter
 
+    private var searchView: SearchView? = null
+
     private var adapter = SongsListAdapter()
 
     private lateinit var exoplayer: ExoPlayer
+
+    var backHandlerInterface: BackHandlerInterface? = null
 
     companion object {
 
@@ -49,6 +54,8 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.getString(ARG_FRAGMENT_NAME)?.let { viewType = it }
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -74,8 +81,38 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
         swiperefresh.setOnRefreshListener { presenter.loadSongsList() }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.main, menu)
+        val searchManager = context.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
+        searchView?.queryHint = resources.getString(R.string.search_hint)
+        searchView?.setSearchableInfo(searchManager.getSearchableInfo(activity.componentName))
+        searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                adapter.filter.filter(query)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_search -> {
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onStart() {
         super.onStart()
+        backHandlerInterface?.setSelectedFragment(this)
         presenter.subscribe()
         exoplayer = ExoPlayerFactory.newSimpleInstance(this.context, DefaultTrackSelector())
     }
@@ -107,6 +144,15 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
 
     override fun stopAudio() {
         exoplayer.stop()
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (activity !is BackHandlerInterface) {
+            throw ClassCastException("Hosting activity must implement the   BackHandlerInterface")
+        } else {
+            backHandlerInterface = activity as BackHandlerInterface
+        }
     }
 
     override fun favButtonClick(song: Song) {
@@ -163,6 +209,20 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
         super.onStop()
         exoplayer.release()
         presenter.unSubscribe()
+    }
+
+    interface BackHandlerInterface {
+        fun setSelectedFragment(fragment: SongsListFragment)
+    }
+
+    fun onBackPressed(): Boolean {
+        searchView?.let {
+            if (!it.isIconified) {
+                it.onActionViewCollapsed()
+                return false
+            }
+        }
+        return true
     }
 
 }
