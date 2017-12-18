@@ -1,32 +1,23 @@
 package com.jayeshsolanki.olaplaystudios.ui.songslist
 
-import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.jayeshsolanki.olaplaystudios.R
 import com.jayeshsolanki.olaplaystudios.data.model.Song
+import com.jayeshsolanki.olaplaystudios.util.AudioPlayerHelper
+import com.jayeshsolanki.olaplaystudios.util.Constants
 import kotlinx.android.synthetic.main.fragment_songs_list.*
-import javax.inject.Inject
 
 class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.ButtonClickListener {
 
@@ -98,30 +89,36 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
         }
     }
 
-    override fun showError(message: String) {
+    override fun showError(errorType: Int) {
+        val message = when (errorType) {
+            1 -> getString(R.string.error_no_songs)
+            2 -> getString(R.string.network_error)
+            else -> getString(R.string.miserable_failure)
+        }
         Toast.makeText(this.context, message,
                 Toast.LENGTH_SHORT).show()
     }
 
     override fun playButtonClick(songUrl: String, songName: String) {
         Toast.makeText(this.context, "Playing $songName", Toast.LENGTH_LONG).show()
-        exoplayer.prepare(prepareAudioSource(songUrl))
+        exoplayer.prepare(AudioPlayerHelper.prepareAudioSource(songUrl, this.context))
         exoplayer.playWhenReady = true
     }
 
     override fun favButtonClick(song: Song) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this.view?.context)
-        val savedSongs = prefs.getString("SAVED", Gson().toJson(ArrayList<Song>()))
+        val savedSongs = prefs.getString(Constants.PREFS_KEY_SAVED_PLAYLIST,
+                Gson().toJson(ArrayList<Song>()))
 
-        val savedSongsList =
-                Gson().fromJson<List<Song>>(savedSongs, object: TypeToken<List<Song>>() {}.type).toMutableList()
+        val savedSongsList = Gson().fromJson<List<Song>>(savedSongs,
+                object: TypeToken<List<Song>>() {}.type).toMutableList()
 
         if (savedSongsList.isEmpty()) {
             savedSongsList.add(song)
         } else {
             var flag = true
             for (savedSong in savedSongsList) {
-                if (savedSong.name.equals(song.name)) {
+                if (savedSong == song) {
                     savedSongsList.remove(savedSong)
                     flag = false
                     break
@@ -131,7 +128,9 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
                 savedSongsList.add(song)
             }
         }
-        prefs.edit().putString("SAVED", Gson().toJson(savedSongsList)).apply()
+        prefs.edit()
+                .putString(Constants.PREFS_KEY_SAVED_PLAYLIST, Gson().toJson(savedSongsList))
+                .apply()
 
     }
 
@@ -141,28 +140,16 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
 
     override fun loadFavoriteSongs() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this.view?.context)
-        val savedSongs = prefs.getString("SAVED", Gson().toJson(ArrayList<Song>()))
+        val savedSongs = prefs.getString(Constants.PREFS_KEY_SAVED_PLAYLIST,
+                Gson().toJson(ArrayList<Song>()))
 
-        val savedSongsList =
-                Gson().fromJson<List<Song>>(savedSongs, object: TypeToken<List<Song>>() {}.type).toMutableList()
+        val savedSongsList = Gson().fromJson<List<Song>>(savedSongs,
+                object: TypeToken<List<Song>>() {}.type).toMutableList()
         list_songs.post {
             if (adapter.itemCount <= 0) {
                 adapter.setAdapterData(savedSongsList)
             }
         }
-    }
-
-    private fun prepareAudioSource(songUrl: String): MediaSource {
-        val userAgent = Util.getUserAgent(context, "OlaPlayStudio")
-        val httpDataSourceFactory = DefaultHttpDataSourceFactory(userAgent, null,
-                DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
-                true /* allowCrossProtocolRedirects */
-        )
-        val dataSourceFactory = DefaultDataSourceFactory(this.context, null, httpDataSourceFactory)
-        val extractorsFactory = DefaultExtractorsFactory()
-        return ExtractorMediaSource(Uri.parse(songUrl), dataSourceFactory,
-                extractorsFactory, null,  null)
     }
 
     override fun onStop() {

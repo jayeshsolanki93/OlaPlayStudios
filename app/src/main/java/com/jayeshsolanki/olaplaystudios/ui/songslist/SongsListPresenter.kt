@@ -35,7 +35,7 @@ constructor(private val songsRepository: SongsRepository,
 
     override fun loadSongsList() {
 
-        if (songsListView.viewType.equals(Constants.ViewType.ALL.value)) {
+        if (songsListView.viewType == Constants.ViewType.ALL.value) {
             songsRepository.getSongs()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -52,20 +52,16 @@ constructor(private val songsRepository: SongsRepository,
         if (!songs.isEmpty()) {
             songsListView.showSongsList(songs)
         } else {
-            if (songsListView.viewType.equals(Constants.ViewType.FAVORITE.value)) {
-
-            } else {
-                processEmptySongs()
-            }
+            processEmptySongs()
         }
     }
 
     private fun processEmptySongs() {
-        songsListView.showError("There are not songs to load")
+        songsListView.showError(1)
     }
     private fun handleError(t: Throwable) {
         Log.e(TAG, t.message)
-        songsListView.showError("Something went wrong with the network")
+        songsListView.showError(2)
     }
 
 }

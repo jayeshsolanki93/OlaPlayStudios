@@ -2,7 +2,13 @@ package com.jayeshsolanki.olaplaystudios.util
 
 object Constants {
 
+    const val APP_NAME = "OlaPlayStudios"
+
     const val API_URL = "http://starlord.hackerearth.com"
+
+    const val PREFS_KEY_SAVED_PLAYLIST = "SAVED_PLAYLIST"
+
+    const val MAILTO_URI = "mailto:%s"
 
     const val EMAIL = "jayeshsolanki93@gmail.com"
 
@@ -17,9 +23,9 @@ object Constants {
     const val MAIL_SUBJECT = "We want you!"
 
     const val MAIL_BODY = """
-        lorem ipsum dolor sit amet
-        Book your tickets to Bangalore. Ola wants you! ヽ(ヅ)ノ
-        """
+    |Hey!
+    |Book your tickets to Bangalore. Ola wants you! ヽ(ヅ)ノ
+    """
 
     enum class ViewType(val value: String) {
         ALL("ALL"),

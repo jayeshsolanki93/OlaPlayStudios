@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken
 import com.jayeshsolanki.olaplaystudios.R
 import com.jayeshsolanki.olaplaystudios.data.model.Song
 import com.jayeshsolanki.olaplaystudios.tool.glide.GlideApp
+import com.jayeshsolanki.olaplaystudios.util.Constants
 import kotlinx.android.synthetic.main.card_song.view.*
 
 class SongsListAdapter : RecyclerView.Adapter<SongsListAdapter.SongViewHolder>() {
@@ -61,15 +62,16 @@ class SongsListAdapter : RecyclerView.Adapter<SongsListAdapter.SongViewHolder>()
                     .into(itemView.cover_image)
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(this.view.context)
-            val savedSongs = prefs.getString("SAVED", Gson().toJson(ArrayList<Song>()))
+            val savedSongs = prefs.getString(Constants.PREFS_KEY_SAVED_PLAYLIST,
+                    Gson().toJson(ArrayList<Song>()))
 
-            val savedSongsList =
-                    Gson().fromJson<List<Song>>(savedSongs, object: TypeToken<List<Song>>() {}.type).toMutableList()
+            val savedSongsList = Gson().fromJson<List<Song>>(savedSongs,
+                    object: TypeToken<List<Song>>() {}.type).toMutableList()
 
             var flag = false
             if (savedSongsList.isNotEmpty()) {
                 for (savedSong in savedSongsList) {
-                    if (savedSong.name.equals(song.name)) {
+                    if (savedSong == song) {
                         flag = true
                         break
                     }
@@ -77,8 +79,7 @@ class SongsListAdapter : RecyclerView.Adapter<SongsListAdapter.SongViewHolder>()
             }
             itemView.btn_favorite.isChecked = flag
 
-            itemView.btn_favorite.setOnCheckedChangeListener { _, isChecked ->
-                Log.i("is fav button checked", isChecked.toString())
+            itemView.btn_favorite.setOnCheckedChangeListener { _, _ ->
                 listener?.favButtonClick(song)
             }
 

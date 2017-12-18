@@ -12,8 +12,7 @@ import com.jayeshsolanki.olaplaystudios.util.Constants
 
 class OlaPlayStudios : Application() {
 
-    lateinit var dataComponent: DataComponent
-        internal set
+    private lateinit var dataComponent: DataComponent
 
     lateinit var songsRepositoryComponent: SongsRepositoryComponent
         internal set

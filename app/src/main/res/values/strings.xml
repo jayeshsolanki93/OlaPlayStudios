@@ -13,12 +13,16 @@
     <string name="nav_portfolio">Portfolio</string>
     <string name="about">About</string>
 
-    <string name="jayesh">Jayesh Solanki</string>
+    <string name="jayesh" translatable="false">Jayesh Solanki</string>
 
     <string name="email_desc">Click to send email to Jayesh</string>
     <string name="linkedin">Connect with Jayesh Solanki on LinkedIn</string>
     <string name="twitter">Connect with Jayesh on twitter</string>
     <string name="stackoverflow">Helps others when his android build is still running.</string>
     <string name="github">Connect on Github</string>
-    <string name="ola_play">Ola Play</string>
+    <string name="ola_play" translatable="false">Ola Play</string>
+
+    <string name="error_no_songs">There are no songs to load</string>
+    <string name="network_error">Something went wrong with the network</string>
+    <string name="miserable_failure">This shouldn\'t happen. Please contact the developer</string>
 </resources>

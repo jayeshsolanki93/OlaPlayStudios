@@ -15,34 +15,35 @@ class PortfolioActivity: AppCompatActivity() {
         setContentView(R.layout.activity_portfolio)
 
         email.setOnClickListener {
-            val i = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
-            i.putExtra(Intent.EXTRA_SUBJECT, Constants.MAIL_SUBJECT)
-            i.putExtra(Intent.EXTRA_TEXT, Constants.MAIL_BODY)
-            startActivity(i)
+            val intent = Intent(Intent.ACTION_SENDTO,
+                    Uri.parse(String.format(Constants.MAILTO_URI, Constants.EMAIL)))
+            intent.putExtra(Intent.EXTRA_SUBJECT, Constants.MAIL_SUBJECT)
+            intent.putExtra(Intent.EXTRA_TEXT, Constants.MAIL_BODY.trimMargin())
+            startActivity(intent)
         }
 
         github.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse(Constants.GITHUB)
-            startActivity(i)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(Constants.GITHUB)
+            startActivity(intent)
         }
 
         stackoverflow.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse(Constants.STACKOVERFLOW)
-            startActivity(i)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(Constants.STACKOVERFLOW)
+            startActivity(intent)
         }
 
         linkedin.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse(Constants.LINKEDIN)
-            startActivity(i)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(Constants.LINKEDIN)
+            startActivity(intent)
         }
 
         twitter.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse(Constants.TWITTER)
-            startActivity(i)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(Constants.TWITTER)
+            startActivity(intent)
         }
     }
 
