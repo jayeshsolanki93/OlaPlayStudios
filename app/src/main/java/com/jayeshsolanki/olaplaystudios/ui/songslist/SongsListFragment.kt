@@ -99,10 +99,14 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
                 Toast.LENGTH_SHORT).show()
     }
 
-    override fun playButtonClick(songUrl: String, songName: String) {
-        Toast.makeText(this.context, "Playing $songName", Toast.LENGTH_LONG).show()
-        exoplayer.prepare(AudioPlayerHelper.prepareAudioSource(songUrl, this.context))
+    override fun playButtonClick(song: Song) {
+        Toast.makeText(this.context, "Playing ${song.name}", Toast.LENGTH_LONG).show()
+        exoplayer.prepare(AudioPlayerHelper.prepareAudioSource(song.url, this.context))
         exoplayer.playWhenReady = true
+    }
+
+    override fun stopAudio() {
+        exoplayer.stop()
     }
 
     override fun favButtonClick(song: Song) {
@@ -116,15 +120,15 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
         if (savedSongsList.isEmpty()) {
             savedSongsList.add(song)
         } else {
-            var flag = true
+            var isInList = false
             for (savedSong in savedSongsList) {
                 if (savedSong == song) {
                     savedSongsList.remove(savedSong)
-                    flag = false
+                    isInList = true
                     break
                 }
             }
-            if (flag) {
+            if (!isInList) {
                 savedSongsList.add(song)
             }
         }
@@ -132,6 +136,8 @@ class SongsListFragment : Fragment(), SongsListContract.View, SongsListAdapter.B
                 .putString(Constants.PREFS_KEY_SAVED_PLAYLIST, Gson().toJson(savedSongsList))
                 .apply()
 
+        Toast.makeText(this.context, getString(R.string.added_to_playlist), Toast.LENGTH_SHORT)
+                .show()
     }
 
     override fun downloadClick() {

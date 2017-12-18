@@ -53,12 +53,12 @@
             tools:src="@drawable/cover_example" />
 
         <ImageButton
-            android:id="@+id/btn_play"
+            android:id="@+id/btn_play_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            android:contentDescription="@string/btn_play_desc"
+            android:contentDescription="@string/btn_play_stop_desc"
             android:minWidth="0dp"
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
@@ -80,8 +80,8 @@
             android:paddingStart="8dp"
             android:textColor="#DE000000"
             android:background="@android:color/transparent"
-            app:layout_constraintStart_toEndOf="@+id/btn_play"
-            app:layout_constraintTop_toTopOf="@+id/btn_play"
+            app:layout_constraintStart_toEndOf="@+id/btn_play_stop"
+            app:layout_constraintTop_toTopOf="@+id/btn_play_stop"
             app:srcCompat="@drawable/ic_file_download" />
 
         <ToggleButton

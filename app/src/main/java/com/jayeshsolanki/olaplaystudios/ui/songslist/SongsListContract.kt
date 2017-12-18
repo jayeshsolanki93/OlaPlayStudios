@@ -16,7 +16,7 @@ interface SongsListContract {
 
     interface View : BaseView<Presenter> {
 
-        // Use this variable to decide on showing 'User Playlist' or 'Songs from the API'
+        /** Use this variable to decide on showing 'User Playlist' or 'Songs from the API' */
         var viewType: String
 
         /**

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Ola Play Studios</string>
 
-    <string name="btn_play_desc">Play the song</string>
+    <string name="btn_play_stop_desc">Play/Stop the song</string>
     <string name="btn_download_desc">Download the song</string>
     <string name="btn_favorite_desc">Add to playlist</string>
 
@@ -25,4 +25,5 @@
     <string name="error_no_songs">There are no songs to load</string>
     <string name="network_error">Something went wrong with the network</string>
     <string name="miserable_failure">This shouldn\'t happen. Please contact the developer</string>
+    <string name="added_to_playlist">Added to Playlist</string>
 </resources>

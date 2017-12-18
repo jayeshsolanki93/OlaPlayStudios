@@ -55,13 +55,13 @@ class SongsListActivity: AppCompatActivity(), NavigationView.OnNavigationItemSel
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.nav_home -> {
-                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.nav_home), Toast.LENGTH_SHORT).show()
                 if (supportFragmentManager.findFragmentByTag(Constants.ViewType.ALL.value) == null) {
                     addSongsListFragment()
                 }
             }
             R.id.nav_playlist -> {
-                Toast.makeText(this, "Playlist", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.nav_playlist), Toast.LENGTH_SHORT).show()
                 if (supportFragmentManager.findFragmentByTag(Constants.ViewType.FAVORITE.value) == null) {
                     addFavoriteFragment()
                 }
